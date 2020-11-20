@@ -1,24 +1,25 @@
 ﻿// Learn more about F# at http://fsharp.org
 
 open System
-open Sql 
 open FSharp.Text
+open MathNet.Numerics.LinearAlgebra
 
 [<EntryPoint>]
 let main argv =
+
+ let input = "x+y=10,x-y=0"
  
-  let x = "   
-  SELECT ANL_BEMERKUNG, LST_BEZEICHNUNG
-  FROM ANL
-  INNER JOIN LST ON LST.LST_ID = ANL.ANL_FS_LST_ID_TYP   
-  WHERE ANL_ID > 1000 AND ANL_BEMERKUNG IS Null
-  ORDER BY ANL_ID ASC, ANL_BEMERKUNG DESC
-  "   
-   
-  let lexbuf = Lexing.LexBuffer<_>.FromString x
-  let y = SQLParser.start SqlLexer.tokenize lexbuf   
-  printfn "%A" y   
-   
-  Console.WriteLine("(press any key)")   
-  Console.ReadKey(true) |> ignore
-  0
+ let lexbuf = Lexing.LexBuffer<_>.FromString input
+
+ let uEquations = EquationParser.start EquationLexer.tokenize lexbuf   
+ let Equation = List.map EquationAnalyzer.GetStandardForm uEquations
+
+ let cos = List.map EquationAnalyzer.GetCoefficients Equation
+ 
+ let m = matrix ( List.map (fun (ds,_) -> ds) cos)
+ let v = vector ( List.map (fun (_,d) -> -1.0*d) cos)
+ 
+ printfn "%A" (m.Solve v)   
+  
+ Console.ReadKey(true) |> ignore
+ 0
