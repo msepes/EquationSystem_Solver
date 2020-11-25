@@ -29,7 +29,7 @@ let GetStandardForm (eq:Equation) =
   let rightSide = constants
   Equation(leftSide,rightSide)
 
-let UnfiyEquation (equations:Equations) = //all Equations must have the same number of variable (missing variable x is 0X  )
+let UnifyEquation (equations:Equations) = //all Equations must have the same number of variable (missing variable x is 0X  )
     
     equations
 
