@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Equation", "Parser\Equation.fsproj", "{28F5CFAE-25F2-498E-BEED-7C7C7FEDF263}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Equation", "src\Equation.fsproj", "{28F5CFAE-25F2-498E-BEED-7C7C7FEDF263}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
