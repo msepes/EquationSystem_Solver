@@ -5,7 +5,7 @@ open FSharp.Text.Lexing
 open FSharp.Text.Parsing.ParseHelpers
 # 1 "EquationParser.fsy"
    
-open Mathe  
+open Equation  
 let gSi sign = match sign with | Mi ->  -1.0  | Pl ->  +1.0  
    
 
@@ -131,7 +131,7 @@ let _fsyacc_immediateActions = [|65535us; 49152us; 65535us; 16385us; 65535us; 65
 let _fsyacc_reductions ()  =    [| 
 # 132 "EquationParser.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
-            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : Mathe.Equations)) in
+            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : Equations)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
@@ -148,7 +148,7 @@ let _fsyacc_reductions ()  =    [|
                                             _1
                    )
 # 18 "EquationParser.fsy"
-                 : Mathe.Equations));
+                 : Equations));
 # 152 "EquationParser.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
@@ -356,5 +356,5 @@ let tables () : FSharp.Text.Parsing.Tables<_> =
     numTerminals = 11;
     productionToNonTerminalTable = _fsyacc_productionToNonTerminalTable  }
 let engine lexer lexbuf startState = (tables ()).Interpret(lexer, lexbuf, startState)
-let start lexer lexbuf : Mathe.Equations =
+let start lexer lexbuf : Equations =
     Microsoft.FSharp.Core.Operators.unbox ((tables ()).Interpret(lexer, lexbuf, 0))

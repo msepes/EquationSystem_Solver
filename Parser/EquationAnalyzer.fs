@@ -1,45 +1,41 @@
 ﻿module EquationAnalyzer
 
-open Mathe
+open Equation
 open FSharpPlus
 open FSharpPlus.Data
 open FSharpx.Collections
 open FSharpx
 
-let ProcessConstants (side:Side) =
+let SumConstants (side:Side) =
     let terms = side.ToFSharpList()
-    let constants = List.filter (fun (t:term) -> match t with | Mathe.Const c -> true  | _ -> false ) terms
-    let cons = Mathe.Const (List.sumBy  (fun (t:term) -> match t with | Mathe.Const c -> c  | _ -> 0.0 ) constants)
-    let variabels = List.filter (fun (t:term) -> match t with | Mathe.Const c -> false  | _ -> true ) terms
+    let constants = List.filter (fun (t:term) ->  not t.IsVariable  ) terms
+    let cons = Equation.Const (List.sumBy  (fun (t:term) -> t.Coefficient ) constants)
+    let variabels = List.filter (fun (t:term) -> t.IsVariable ) terms
     cons::variabels
-
   
-
-let processRight (side:Side) = 
+let IsolateConstant (side:Side) = 
     let terms = side.ToFSharpList()
-    let inverted = List.map (fun (t:term) -> match t with | Mathe.Const c -> Mathe.Const (-1.0 * c )  | Var(c,v) -> Var(-1.0 * c,v) ) terms
-    
-    
-    ( [Mathe.Const 0.0] ,inverted)
+    let inverted = List.filter (fun (t:term) -> t.IsVariable ) terms |> List.map (fun (t:term) -> t.Invert) 
+    let constants = List.filter (fun (t:term) -> not t.IsVariable ) terms
+    (constants,inverted)
 
 let GetStandardForm (eq:Equation) = 
-  let (s1,s2) = eq
-
-  let se1 = ProcessConstants s1
-
-  let se2 = ProcessConstants s2
+  let (leftSide,rightSide) = eq
+  let LeftSide = SumConstants leftSide
+  let rightSide = SumConstants rightSide
+  let (constants,inverted) = IsolateConstant rightSide
   
-  let (side2,sf2) = processRight se2
-  
-  let side1 = ProcessConstants (List.concat [se1;sf2])
-  Equation(side1,side2)
+  let leftSide = List.concat [LeftSide;inverted] |> List.sortBy (fun (t:term) -> t.SortCriteria)
+  let rightSide = constants
+  Equation(leftSide,rightSide)
 
+let UnfiyEquation (equations:Equations) = //all Equations must have the same number of variable (missing variable x is 0X  )
+    
+    equations
 
-let GetCoefficients (eq:Equation) = 
-  let (s1,s2) = eq
-
-  let Coe1 = List.filter (fun (t:term) -> match t with | Var(c,s) ->   true | _ -> false ) s1 |> List.map (fun (t:term) -> match t with | Mathe.Const c ->  c   | Var(c,_) -> c ) 
-  let constant = List.filter (fun (t:term) -> match t with | Mathe.Const c -> true  | _ -> false ) s1 |> List.map (fun (t:term) -> match t with | Mathe.Const c ->  c   | Var(c,_) -> c ) 
-
-  (Coe1,constant.[0])
+let GetCoefficients (equation:Equation) = //Equation x+...-y= c where x..y are variables and c is constant
+  let (leftSide,rightSide) = equation
+  let Coefficients = leftSide |> List.map (fun (t:term) -> t.Coefficient ) 
+  let constant =  rightSide |> head |> (fun (t:term) ->  t.Coefficient)
+  (Coefficients,constant)
 

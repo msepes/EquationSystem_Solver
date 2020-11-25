@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Mathe.fs" />
+    <Compile Include="Equation.fs" />
     <Compile Include="EquationParser.fs" />
     <Compile Include="EquationLexer.fs" />
     <Compile Include="EquationAnalyzer.fs" />

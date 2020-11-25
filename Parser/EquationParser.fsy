@@ -1,5 +1,5 @@
 ﻿%{   
-open Mathe  
+open Equation  
 let gSi sign = match sign with | Mi ->  -1.0  | Pl ->  +1.0  
    
 %}   
@@ -11,7 +11,7 @@ let gSi sign = match sign with | Mi ->  -1.0  | Pl ->  +1.0
 %token COMMA   
 // start   
 %start start   
-%type <Mathe.Equations> start   
+%type <Equations> start   
  
 %%   
  
