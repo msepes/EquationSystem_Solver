@@ -15,8 +15,8 @@ type term =  Var of double * string | Const of double with
 
    member this.Invert =
       match this with
-       | Var (c,v) -> Var(c * -1.0,v)
-       | Const c -> Const(c * -1.0)
+       | Var (c,v) -> Var(-c,v)
+       | Const c -> Const(-c)
 
    member this.SortCriteria =
        match this with

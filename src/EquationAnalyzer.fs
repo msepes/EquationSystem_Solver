@@ -26,7 +26,7 @@ let GetStandardForm (eq:Equation) =
   let (constants,inverted) = IsolateConstant rightSide
   
   let leftSide = List.concat [LeftSide;inverted] |> List.sortBy (fun (t:term) -> t.SortCriteria)
-  let rightSide = constants
+  let rightSide = if constants.IsEmpty then [Equation.Const 0.0] else constants
   Equation(leftSide,rightSide)
 
 let UnifyEquation (equations:Equations) = //all Equations must have the same number of variable (missing variable x is 0X  )
